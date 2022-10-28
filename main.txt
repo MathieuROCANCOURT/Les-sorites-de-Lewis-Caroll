@@ -1,0 +1,75 @@
+visuFormule f1
+visuFormule f2
+visuFormule f3
+visuFormule f4
+visuFormule f5
+visuFormule f6
+
+visuFormule (elimine f2)
+visuFormule (elimine f3)
+visuFormule (elimine f4)
+visuFormule (elimine f6)
+
+
+visuFormule f2b
+visuFormule (elimine f2b)
+visuFormule (ameneNon (elimine f2b))
+
+visuFormule f4
+visuFormule (elimine f4)
+visuFormule (ameneNon (elimine f4))
+visuFormule (ameneNon f5)
+disNon (Ou (Var "a") (Var "b"))
+disNon (Non (Ou (Var "a") (Var "b")))
+disNon (Ou (Var "a") (Et (Var "b") (Var "c")))
+disNon (Ou (Var "a") (Et (Var "b") (Non (Var "c"))))
+
+normalise (Ou (Et (Var "c") (Var "d")) (Et (Var "a") (Var "b")))
+visuFormule (Ou (Et (Var "c") (Var "d")) (Et (Var "a") (Var "b")))
+visuFormule (normalise (Ou (Et (Var "c") (Var "d")) (Et (Var "a") (Var "b"))))
+
+visuFormule (formeClausale f1)
+visuFormule (formeClausale f2)
+visuFormule (formeClausale f3)
+visuFormule (formeClausale f4)
+visuFormule (formeClausale f5)
+visuFormule (formeClausale f6)
+
+
+ouToListe (Non (Var "b"))
+etToListe (Non (Var "b"))
+ouToListe (Ou (Non (Var "a")) (Non (Var "b")))
+etToListe (Ou (Non (Var "a")) (Non (Var "b")))
+ouToListe (Ou (Non (Var "a")) (Ou (Var "c") (Non (Var "b"))))
+etToListe (Ou (Non (Var "a")) (Ou (Var "c") (Non (Var "b"))))
+etToListe (Et (Ou (Non (Var "c")) (Var "d")) (Ou (Non (Var "b")) (Var "d")))
+etToListe (Et (Ou (Var "a") (Non (Var "b")))(Et (Ou (Non (Var "c")) (Var "d"))(Ou (Var "b") (Ou (Non (Var "d")) (Var "c")))))
+
+sontLiees [Non (Var "a"), Non (Var "b")] [Non (Var "d"), Var "b", Var "c"]
+sontLiees [Non (Var "a"), Var "b", Var "c"] [Non (Var "d"), Var "a", Var "c"]
+sontLiees [Var "a", Non (Var "b"), Var "d"] [Var "a", Non (Var "c"), Non (Var "d")]
+sontLiees [Var "a", Var "b", Var "c"] [Var "a", Non (Var "c"), Non (Var "d")]
+sontLiees [Non (Var "a"), Var "b", Var "c"] [Non (Var "d"), Non (Var "a"), Var "c"]
+sontLiees [Var "a", Non (Var "b"), Var "d"] [Var "a", Non (Var "c"), Var "d"]
+
+resolvante [Non (Var "a"), Non (Var "b")] [Var "b", Var "c"]
+resolvante [ Var "a", Non (Var "b"), Var "d"] [Var "a", Non (Var "d"), Non (Var "b")]
+resolvante [ Var "a", Non (Var "b"), Var "d"] [Non (Var "a"), Non (Var "d"), Non (Var "b")]
+resolvante [ Var "a", Var "b", Var "c"] [Non (Var "a"), Non (Var "b"), Var "d"]
+
+
+
+
+formeClausale exemple1
+visuFormule (formeClausale exemple1)
+formeClausaleBis (formeClausale exemple1)
+deduire exemple1
+
+formeClausale exemple2
+visuFormule (formeClausale exemple2)
+formeClausaleBis (formeClausale exemple2)
+deduire exemple2
+
+formeClausale bebe
+formeClausaleBis (formeClausale bebe)
+deduire bebe

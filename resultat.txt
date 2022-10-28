@@ -1,0 +1,106 @@
+*Main> visuFormule f1
+"((c & d) v (a & b))"
+*Main> visuFormule f2
+"(d => (c v ~b))"
+*Main> visuFormule f3
+"(d <=> (c & d))"
+*Main> visuFormule f4
+"(~d => (c v b))"
+*Main> visuFormule f5
+"~~a"
+*Main> visuFormule f6
+"(~(a v d) => (c v b))"
+*Main>
+*Main> visuFormule (elimine f2)
+"(~d v (c v ~b))"
+*Main> visuFormule (elimine f3)
+"((~d v (c & d)) & (~(c & d) v d))"
+*Main> visuFormule (elimine f4)
+"(~~d v (c v b))"
+*Main> visuFormule (elimine f6)
+"(~~(a v d) v (c v b))"
+*Main>
+*Main>
+*Main> visuFormule f2b
+"(~d => (c v b))"
+*Main> visuFormule (elimine f2b)
+"(~~d v (c v b))"
+*Main> visuFormule (ameneNon (elimine f2b))
+"(d v (c v b))"
+*Main>
+*Main> visuFormule f4
+"(~d => (c v b))"
+*Main> visuFormule (elimine f4)
+"(~~d v (c v b))"
+*Main> visuFormule (ameneNon (elimine f4))
+"(d v (c v b))"
+*Main> visuFormule (ameneNon f5)
+"a"
+*Main> disNon (Ou (Var "a") (Var "b"))
+Et (Non (Var "a")) (Non (Var "b"))
+*Main> disNon (Non (Ou (Var "a") (Var "b")))
+Ou (Var "a") (Var "b")
+*Main> disNon (Ou (Var "a") (Et (Var "b") (Var "c")))
+Et (Non (Var "a")) (Ou (Non (Var "b")) (Non (Var "c")))
+*Main> disNon (Ou (Var "a") (Et (Var "b") (Non (Var "c"))))
+Et (Non (Var "a")) (Ou (Non (Var "b")) (Var "c"))
+*Main>
+*Main> normalise (Ou (Et (Var "c") (Var "d")) (Et (Var "a") (Var "b")))
+Et (Ou (Var "c") (Var "a")) (Et (Ou (Var "c") (Var "b")) (Et (Ou (Var "d") (Var "a")) (Ou (Var "d") (Var "b"))))
+*Main> visuFormule (Ou (Et (Var "c") (Var "d")) (Et (Var "a") (Var "b")))
+"((c & d) v (a & b))"
+*Main> visuFormule (normalise (Ou (Et (Var "c") (Var "d")) (Et (Var "a") (Var "b"))))
+"((c v a) & ((c v b) & ((d v a) & (d v b))))"
+*Main>
+*Main> visuFormule (formeClausale f1)
+"((c v a) & ((c v b) & ((d v a) & (d v b))))"
+*Main> visuFormule (formeClausale f2)
+"(~d v (c v ~b))"
+*Main> visuFormule (formeClausale f3)
+"((~d v c) & ((~d v d) & ((~c v ~d) v d)))"
+*Main> visuFormule (formeClausale f4)
+"(d v (c v b))"
+*Main> visuFormule (formeClausale f5)
+"a"
+*Main> visuFormule (formeClausale f6)
+"((a v d) v (c v b))"
+*Main>
+*Main>
+*Main> ouToListe (Non (Var "b"))
+[Non (Var "b")]
+*Main> etToListe (Non (Var "b"))
+[[Non (Var "b")]]
+*Main> ouToListe (Ou (Non (Var "a")) (Non (Var "b")))
+[Non (Var "a"),Non (Var "b")]
+*Main> etToListe (Ou (Non (Var "a")) (Non (Var "b")))
+[[Non (Var "a"),Non (Var "b")]]
+*Main> ouToListe (Ou (Non (Var "a")) (Ou (Var "c") (Non (Var "b"))))
+[Non (Var "a"),Var "c",Non (Var "b")]
+*Main> etToListe (Ou (Non (Var "a")) (Ou (Var "c") (Non (Var "b"))))
+[[Non (Var "a"),Var "c",Non (Var "b")]]
+*Main> etToListe (Et (Ou (Non (Var "c")) (Var "d")) (Ou (Non (Var "b")) (Var "d")))
+[[Non (Var "c"),Var "d"],[Non (Var "b"),Var "d"]]
+*Main> etToListe (Et (Ou (Var "a") (Non (Var "b")))(Et (Ou (Non (Var "c")) (Var "d"))(Ou (Var "b") (Ou (Non (Var "d")) )
+[[Var "a",Non (Var "b")],[Non (Var "c"),Var "d"],[Var "b",Non (Var "d"),Var "c"]]
+*Main>
+*Main> sontLiees [Non (Var "a"), Non (Var "b")] [Non (Var "d"), Var "b", Var "c"]
+True
+*Main> sontLiees [Non (Var "a"), Var "b", Var "c"] [Non (Var "d"), Var "a", Var "c"]
+True
+*Main> sontLiees [Var "a", Non (Var "b"), Var "d"] [Var "a", Non (Var "c"), Non (Var "d")]
+True
+*Main> sontLiees [Var "a", Var "b", Var "c"] [Var "a", Non (Var "c"), Non (Var "d")]
+True
+*Main> sontLiees [Non (Var "a"), Var "b", Var "c"] [Non (Var "d"), Non (Var "a"), Var "c"]
+False
+*Main> sontLiees [Var "a", Non (Var "b"), Var "d"] [Var "a", Non (Var "c"), Var "d"]
+False
+*Main>
+*Main> resolvante [Non (Var "a"), Non (Var "b")] [Var "b", Var "c"]
+[Non (Var "a"),Var "c"]
+*Main> resolvante [ Var "a", Non (Var "b"), Var "d"] [Var "a", Non (Var "d"), Non (Var "b")]
+[Var "a",Non (Var "b")]
+*Main> resolvante [ Var "a", Non (Var "b"), Var "d"] [Non (Var "a"), Non (Var "d"), Non (Var "b")]
+[Non (Var "b"),Var "d",Non (Var "d"),Non (Var "b")]
+*Main> resolvante [ Var "a", Var "b", Var "c"] [Non (Var "a"), Non (Var "b"), Var "d"]
+[Var "b",Var "c",Non (Var "b"),Var "d"]
