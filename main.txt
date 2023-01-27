@@ -10,7 +10,6 @@ visuFormule (elimine f3)
 visuFormule (elimine f4)
 visuFormule (elimine f6)
 
-
 visuFormule f2b
 visuFormule (elimine f2b)
 visuFormule (ameneNon (elimine f2b))
@@ -35,7 +34,6 @@ visuFormule (formeClausale f4)
 visuFormule (formeClausale f5)
 visuFormule (formeClausale f6)
 
-
 ouToListe (Non (Var "b"))
 etToListe (Non (Var "b"))
 ouToListe (Ou (Non (Var "a")) (Non (Var "b")))
@@ -57,19 +55,13 @@ resolvante [ Var "a", Non (Var "b"), Var "d"] [Var "a", Non (Var "d"), Non (Var 
 resolvante [ Var "a", Non (Var "b"), Var "d"] [Non (Var "a"), Non (Var "d"), Non (Var "b")]
 resolvante [ Var "a", Var "b", Var "c"] [Non (Var "a"), Non (Var "b"), Var "d"]
 
-
-
-
 formeClausale exemple1
 visuFormule (formeClausale exemple1)
-formeClausaleBis (formeClausale exemple1)
-deduire exemple1
-
+etToListe (formeClausale exemple1)
 formeClausale exemple2
 visuFormule (formeClausale exemple2)
-formeClausaleBis (formeClausale exemple2)
+etToListe (formeClausale exemple2)
 deduire exemple2
-
 formeClausale bebe
-formeClausaleBis (formeClausale bebe)
+etToListe (formeClausale bebe)
 deduire bebe

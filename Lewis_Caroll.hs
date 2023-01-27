@@ -15,6 +15,53 @@ f4 = (Imp (Non (Var "d")) (Ou (Var "c") (Var "b")))
 f5 = (Non (Non (Var "a")))
 f6 = (Imp (Non (Ou (Var "a") (Var "d"))) (Ou (Var "c") (Var "b")))
 
+exemple1 = (Et (Imp (Var "A") (Var "B"))
+               (Et (Imp (Var "B") (Var "C"))
+                  (Et (Imp (Var "C") (Non (Var "D")))
+                    (Et (Imp (Non (Var "D")) (Non (Var "E")))
+                       (Imp (Non (Var "E")) (Var "F"))))))
+
+
+exemple2 = (Et (Imp (Non (Var "A")) (Var "B"))
+             (Et (Imp (Var "C") (Non (Var "D")))
+                 (Et (Imp (Var "E") (Non (Var "F")))
+                     (Et (Imp (Non (Var "D")) (Non (Var "B")))
+                         (Imp (Var "A") (Var "F"))))))
+
+
+bebe = (Et (Imp (Var "bebe") (Non (Var "logique")))
+          (Et (Imp (Var "tuer crocodile") (Non (Var "meprise")))
+             (Imp (Non (Var "logique")) (Var "meprise"))))
+
+
+a1 = "les sains d_esprit"
+b1 = "possibles logiciens"
+c1 = "enfants"
+d1 = "malade mental"
+g1 = "juge possible"
+
+logiciens = (Et (Imp (Var a1) (Var b1))
+               (Et (Imp (Var g1) (Non (Var d1)))
+                  (Et (Imp (Var b1) (Non (Var c1)))
+                      (Imp (Non (Var d1)) (Var a1)))))
+
+a2 = "les eleves de moins de 12 ans"
+b2 = "interne"
+c2 = "les eleves studieux"
+d2 = "cheveux roux"
+e2 = "helleniste"
+g2 = "paresseux"
+h2 = "externe"
+
+ecole = (Et (Imp (Var b2) (Non (Var a2)))
+            (Et (Imp (Var c2) (Var d2))
+                (Et (Imp (Var e2) (Non (Var h2)))
+                     (Et (Imp (Non (Var a2)) (Non (Var g2)))
+                         (Et (Imp (Non (Var h2)) (Var b2))
+                             (Imp (Non (Var g2)) (Var c2)))))))
+
+
+
 
 -- Visualisation de la formule
 visuFormule :: Formule -> String
@@ -25,7 +72,7 @@ visuFormule (Ou g d) = "(" ++ (visuFormule g) ++ " v " ++ (visuFormule d) ++ ")"
 visuFormule (Imp g d) = "(" ++ (visuFormule g) ++ " => " ++ (visuFormule d) ++ ")"
 visuFormule (Equi g d) = "(" ++ (visuFormule g) ++ " <=> " ++ (visuFormule d) ++ ")"
 
--- Enleve tous les implications et équivalence de la formule
+-- Enlève tous les implications et équivalence de la formule
 elimine :: Formule -> Formule
 elimine (Var p) = (Var p)
 elimine (Non f) = (Non (elimine f))
@@ -41,7 +88,7 @@ ameneNon (Non f) = disNon f
 ameneNon (Et g d) = (Et (ameneNon g) (ameneNon d))
 ameneNon (Ou g d) = (Ou (ameneNon g) (ameneNon d))
 
--- Renvoie la négation de la formule
+-- Renvoie la négation de la formule pour appliquer les 2 lois de Morgan
 disNon (Var p) = (Non (Var p))
 disNon (Non f) = ameneNon f
 disNon (Et g d) = (Ou (disNon g) (disNon d))
@@ -63,6 +110,7 @@ developper g (Et d1 d2) = normalise (Et (Ou g d1) (Ou g d2))
 developper g d = (Ou g d)
 
 -- Utilise les fonctions pour être sous forme clausale
+-- (Application de l'algèbre de Boole)
 formeClausale :: Formule -> Formule
 formeClausale f = normalise (ameneNon (elimine f))
 
@@ -114,29 +162,14 @@ resolvante (x:xs) (y:ys)
     | (sontLiees [x] ys)                                = y : (resolvante (x:xs) ys)
     | otherwise                                         = x : y : (resolvante xs ys)
 
-a1 = "les sains d_esprit"
-b1 = "possibles logiciens"
-c1 = "enfants"
-d1 = "malade mental"
-g1 = "juge possible"
+-- Résoud les formules de Lewis Caroll, conclusion du sorite
+deduire :: Formule -> Clause
+deduire x = resoudre (head sorite) (tail sorite)
+    where sorite = (etToListe (formeClausale x))
 
-logiciens = (Et (Imp (Var a1) (Var b1))
-               (Et (Imp (Var g1) (Non (Var d1)))
-                  (Et (Imp (Var b1) (Non (Var c1)))
-                      (Imp (Non (Var d1)) (Var a1)))))
-
-a2 = "les eleves de moins de 12 ans"
-b2 = "interne"
-c2 = "les eleves studieux"
-d2 = "cheveux roux"
-e2 = "helleniste"
-g2 = "paresseux"
-h2 = "externe"
-
-ecole = (Et (Imp (Var b2) (Non (Var a2)))
-            (Et (Imp (Var c2) (Var d2))
-                (Et (Imp (Var e2) (Non (Var h2)))
-                     (Et (Imp (Non (Var a2)) (Non (Var g2)))
-                         (Et (Imp (Non (Var h2)) (Var b2))
-                             (Imp (Non (Var g2)) (Var c2)))))))
+resoudre :: Clause -> FormuleBis -> Clause
+resoudre xs [] = xs
+resoudre xs (ys:yss)
+    | sontLiees xs ys = resoudre (resolvante xs ys) yss
+    | otherwise = resoudre xs (yss ++ [ys])
 

@@ -10,7 +10,6 @@
 "~~a"
 *Main> visuFormule f6
 "(~(a v d) => (c v b))"
-*Main>
 *Main> visuFormule (elimine f2)
 "(~d v (c v ~b))"
 *Main> visuFormule (elimine f3)
@@ -19,15 +18,12 @@
 "(~~d v (c v b))"
 *Main> visuFormule (elimine f6)
 "(~~(a v d) v (c v b))"
-*Main>
-*Main>
 *Main> visuFormule f2b
 "(~d => (c v b))"
 *Main> visuFormule (elimine f2b)
 "(~~d v (c v b))"
 *Main> visuFormule (ameneNon (elimine f2b))
 "(d v (c v b))"
-*Main>
 *Main> visuFormule f4
 "(~d => (c v b))"
 *Main> visuFormule (elimine f4)
@@ -44,14 +40,12 @@ Ou (Var "a") (Var "b")
 Et (Non (Var "a")) (Ou (Non (Var "b")) (Non (Var "c")))
 *Main> disNon (Ou (Var "a") (Et (Var "b") (Non (Var "c"))))
 Et (Non (Var "a")) (Ou (Non (Var "b")) (Var "c"))
-*Main>
 *Main> normalise (Ou (Et (Var "c") (Var "d")) (Et (Var "a") (Var "b")))
 Et (Ou (Var "c") (Var "a")) (Et (Ou (Var "c") (Var "b")) (Et (Ou (Var "d") (Var "a")) (Ou (Var "d") (Var "b"))))
 *Main> visuFormule (Ou (Et (Var "c") (Var "d")) (Et (Var "a") (Var "b")))
 "((c & d) v (a & b))"
 *Main> visuFormule (normalise (Ou (Et (Var "c") (Var "d")) (Et (Var "a") (Var "b"))))
 "((c v a) & ((c v b) & ((d v a) & (d v b))))"
-*Main>
 *Main> visuFormule (formeClausale f1)
 "((c v a) & ((c v b) & ((d v a) & (d v b))))"
 *Main> visuFormule (formeClausale f2)
@@ -64,8 +58,6 @@ Et (Ou (Var "c") (Var "a")) (Et (Ou (Var "c") (Var "b")) (Et (Ou (Var "d") (Var 
 "a"
 *Main> visuFormule (formeClausale f6)
 "((a v d) v (c v b))"
-*Main>
-*Main>
 *Main> ouToListe (Non (Var "b"))
 [Non (Var "b")]
 *Main> etToListe (Non (Var "b"))
@@ -82,7 +74,6 @@ Et (Ou (Var "c") (Var "a")) (Et (Ou (Var "c") (Var "b")) (Et (Ou (Var "d") (Var 
 [[Non (Var "c"),Var "d"],[Non (Var "b"),Var "d"]]
 *Main> etToListe (Et (Ou (Var "a") (Non (Var "b")))(Et (Ou (Non (Var "c")) (Var "d"))(Ou (Var "b") (Ou (Non (Var "d")) )
 [[Var "a",Non (Var "b")],[Non (Var "c"),Var "d"],[Var "b",Non (Var "d"),Var "c"]]
-*Main>
 *Main> sontLiees [Non (Var "a"), Non (Var "b")] [Non (Var "d"), Var "b", Var "c"]
 True
 *Main> sontLiees [Non (Var "a"), Var "b", Var "c"] [Non (Var "d"), Var "a", Var "c"]
@@ -95,7 +86,6 @@ True
 False
 *Main> sontLiees [Var "a", Non (Var "b"), Var "d"] [Var "a", Non (Var "c"), Var "d"]
 False
-*Main>
 *Main> resolvante [Non (Var "a"), Non (Var "b")] [Var "b", Var "c"]
 [Non (Var "a"),Var "c"]
 *Main> resolvante [ Var "a", Non (Var "b"), Var "d"] [Var "a", Non (Var "d"), Non (Var "b")]
@@ -104,3 +94,26 @@ False
 [Non (Var "b"),Var "d",Non (Var "d"),Non (Var "b")]
 *Main> resolvante [ Var "a", Var "b", Var "c"] [Non (Var "a"), Non (Var "b"), Var "d"]
 [Var "b",Var "c",Non (Var "b"),Var "d"]
+*Main> formeClausale exemple1
+Et (Ou (Non (Var "A")) (Var "B")) (Et (Ou (Non (Var "B")) (Var "C")) (Et (Ou (Non (Var "C")) (Non (Var "D"))) (Et (Ou (Var "D") (Non (Var "E"))) (Ou (Var "E") (Var "F")))))
+*Main> visuFormule (formeClausale exemple1)
+"((~A v B) & ((~B v C) & ((~C v ~D) & ((D v ~E) & (E v F)))))"
+*Main> etToListe (formeClausale exemple1)
+[[Non (Var "A"),Var "B"],[Non (Var "B"),Var "C"],[Non (Var "C"),Non (Var "D")],[Var "D",Non (Var "E")],[Var "E",Var "F"]]
+*Main> formeClausale exemple2
+Et (Ou (Var "A") (Var "B")) (Et (Ou (Non (Var "C")) (Non (Var "D"))) (Et (Ou (Non (Var "E")) (Non (Var "F"))) (Et (Ou (Var "D") (Non (Var "B"))) (Ou (Non (Var "A")) (Var "F")))))
+*Main> visuFormule (formeClausale exemple2)
+"((A v B) & ((~C v ~D) & ((~E v ~F) & ((D v ~B) & (~A v F)))))"
+*Main> etToListe (formeClausale exemple2)
+[[Var "A",Var "B"],[Non (Var "C"),Non (Var "D")],[Non (Var "E"),Non (Var "F")],[Var "D",Non (Var "B")],[Non (Var "A"),Var "F"]]
+*Main> deduire exemple2
+[Non (Var "C"),Non (Var "E")]
+*Main> deduire bebe
+[Non (Var "bebe"),Non (Var "tuer crocodile")]
+*Main> formeClausale bebe
+Et (Ou (Non (Var "bebe")) (Non (Var "logique"))) (Et (Ou (Non (Var "tuer crocodile")) (Non (Var "meprise"))) (Ou (Var "logique") (Var "meprise")))
+*Main> etToListe (formeClausale bebe)
+[[Non (Var "bebe"),Non (Var "logique")],[Non (Var "tuer crocodile"),Non (Var "meprise")],[Var "logique",Var "meprise"]]
+*Main> deduire bebe
+[Non (Var "bebe"),Non (Var "tuer crocodile")]
+*Main>
