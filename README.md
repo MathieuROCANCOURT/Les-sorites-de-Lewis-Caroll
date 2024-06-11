@@ -1,4 +1,4 @@
-# Les sorites de Lewis Caroll
+# Les sorites de Lewis Carroll
 Haskell 8.6.5
 
 Code qui permet de résoudre le sorite avec la fonction deduire.
